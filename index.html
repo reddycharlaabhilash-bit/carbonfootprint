@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoTrace — Personal Carbon Tracker & Reduction Guide</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Track your daily carbon footprint, take personalized actions, complete green challenges, and watch your virtual Eco-Garden grow.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon-wrapper">
+            <i data-lucide="leaf" class="logo-icon"></i>
+          </div>
+          <span class="logo-text">EcoTrace</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#dashboard" class="nav-item active" id="nav-dashboard">
+              <i data-lucide="layout-dashboard"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#garden" class="nav-item" id="nav-garden">
+              <i data-lucide="palmtree"></i>
+              <span>Eco-Garden</span>
+            </a>
+          </li>
+          <li>
+            <a href="#challenges" class="nav-item" id="nav-challenges">
+              <i data-lucide="award"></i>
+              <span>Challenges</span>
+            </a>
+          </li>
+          <li>
+            <a href="#insights" class="nav-item" id="nav-insights">
+              <i data-lucide="lightbulb"></i>
+              <span>Insights</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="user-eco-card">
+          <div class="user-eco-avatar">
+            <i data-lucide="sparkles" class="text-emerald"></i>
+          </div>
+          <div class="user-eco-info">
+            <span class="user-rank">Eco Hero</span>
+            <span class="user-level">Level <span id="user-level-val">1</span></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="main-header">
+        <div class="header-welcome">
+          <h1 id="welcome-title">Hello, Eco-Citizen</h1>
+          <p class="text-secondary" id="today-date-str">Saturday, June 20, 2026</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="open-log-modal-btn">
+            <i data-lucide="plus"></i>
+            <span>Log Activity</span>
+          </button>
+        </div>
+      </header>
+      
+      <!-- Page Sections -->
+      <div class="content-body">
+        
+        <!-- DASHBOARD VIEW -->
+        <section id="dashboard-view" class="view-section active-view">
+          <!-- Top Hero Grid -->
+          <div class="grid grid-2-col">
+            
+            <!-- Radial Progress Card -->
+            <div class="card glass-card hero-gauge-card">
+              <div class="card-header">
+                <h3>Today's Emissions</h3>
+                <span class="badge" id="budget-status">Under Budget</span>
+              </div>
+              <div class="gauge-container">
+                <svg class="radial-gauge" viewBox="0 0 100 100">
+                  <circle class="gauge-bg" cx="50" cy="50" r="40" />
+                  <circle class="gauge-fill" id="emissions-gauge-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
+                </svg>
+                <div class="gauge-center-text">
+                  <span class="gauge-value" id="today-emissions-val">0.0</span>
+                  <span class="gauge-unit">kg CO₂e</span>
+                </div>
+              </div>
+              <div class="gauge-footer-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Daily Budget</span>
+                  <span class="stat-value text-emerald" id="daily-budget-val">15.0 kg</span>
+                </div>
+                <div class="divider-y"></div>
+                <div class="stat-item">
+                  <span class="stat-label">Net Reduction</span>
+                  <span class="stat-value text-mint" id="net-savings-val">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Virtual Garden Preview Card -->
+            <div class="card glass-card garden-preview-card">
+              <div class="card-header">
+                <h3>Your Eco-Garden</h3>
+                <button class="btn-text" id="go-to-garden-btn">Full View <i data-lucide="arrow-right"></i></button>
+              </div>
+              <div class="garden-canvas-container mini-garden">
+                <canvas id="mini-garden-canvas"></canvas>
+                <div class="garden-overlay">
+                  <div class="garden-status">
+                    <span id="garden-growth-lbl">Healthy Sprouts</span>
+                    <p class="text-secondary small">Your garden thrives as you log low-carbon actions.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+          <!-- Category Grid -->
+          <h2 class="section-title">Emissions by Category</h2>
+          <div class="grid grid-4-col">
+            
+            <!-- Transportation -->
+            <div class="card glass-card category-card" data-category="transport">
+              <div class="category-icon-wrapper transport-theme">
+                <i data-lucide="car"></i>
+              </div>
+              <div class="category-meta">
+                <span class="category-name">Transportation</span>
+                <div class="category-stats">
+                  <span class="category-value" id="cat-transport-val">0.0</span>
+                  <span class="category-unit">kg CO₂e</span>
+                </div>
+              </div>
+              <div class="category-progress-bar">
+                <div class="bar-fill transport-theme" id="cat-transport-bar" style="width: 0%"></div>
+              </div>
+              <span class="category-percent text-secondary" id="cat-transport-percent">0% of budget</span>
+            </div>
+            
+            <!-- Diet / Food -->
+            <div class="card glass-card category-card" data-category="diet">
+              <div class="category-icon-wrapper diet-theme">
+                <i data-lucide="utensils"></i>
+              </div>
+              <div class="category-meta">
+                <span class="category-name">Diet & Food</span>
+                <div class="category-stats">
+                  <span class="category-value" id="cat-diet-val">0.0</span>
+                  <span class="category-unit">kg CO₂e</span>
+                </div>
+              </div>
+              <div class="category-progress-bar">
+                <div class="bar-fill diet-theme" id="cat-diet-bar" style="width: 0%"></div>
+              </div>
+              <span class="category-percent text-secondary" id="cat-diet-percent">0% of budget</span>
+            </div>
+            
+            <!-- Home Energy -->
+            <div class="card glass-card category-card" data-category="energy">
+              <div class="category-icon-wrapper energy-theme">
+                <i data-lucide="zap"></i>
+              </div>
+              <div class="category-meta">
+                <span class="category-name">Home Energy</span>
+                <div class="category-stats">
+                  <span class="category-value" id="cat-energy-val">0.0</span>
+                  <span class="category-unit">kg CO₂e</span>
+                </div>
+              </div>
+              <div class="category-progress-bar">
+                <div class="bar-fill energy-theme" id="cat-energy-bar" style="width: 0%"></div>
+              </div>
+              <span class="category-percent text-secondary" id="cat-energy-percent">0% of budget</span>
+            </div>
+            
+            <!-- Consumption & Waste -->
+            <div class="card glass-card category-card" data-category="waste">
+              <div class="category-icon-wrapper waste-theme">
+                <i data-lucide="trash-2"></i>
+              </div>
+              <div class="category-meta">
+                <span class="category-name">Shopping & Waste</span>
+                <div class="category-stats">
+                  <span class="category-value" id="cat-waste-val">0.0</span>
+                  <span class="category-unit">kg CO₂e</span>
+                </div>
+              </div>
+              <div class="category-progress-bar">
+                <div class="bar-fill waste-theme" id="cat-waste-bar" style="width: 0%"></div>
+              </div>
+              <span class="category-percent text-secondary" id="cat-waste-percent">0% of budget</span>
+            </div>
+            
+          </div>
+          
+          <!-- Bottom Layout: History Chart & Rapid Insight -->
+          <div class="grid grid-2-col-wide margin-top">
+            
+            <!-- Historical SVG Chart -->
+            <div class="card glass-card chart-card">
+              <div class="card-header">
+                <h3>7-Day Carbon Trend</h3>
+                <span class="text-secondary small">Reductions over time</span>
+              </div>
+              <div class="chart-container" id="svg-chart-container">
+                <!-- SVG Chart will be injected by JavaScript -->
+              </div>
+            </div>
+            
+            <!-- Action Hub Preview -->
+            <div class="card glass-card quick-challenges-card">
+              <div class="card-header">
+                <h3>Daily Eco-Challenges</h3>
+                <span class="badge badge-mint" id="challenges-completed-lbl">0/3 Done</span>
+              </div>
+              <div class="quick-challenges-list" id="quick-challenges-list">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- ECO-GARDEN VIEW -->
+        <section id="garden-view" class="view-section">
+          <div class="card glass-card garden-full-card">
+            <div class="card-header">
+              <div>
+                <h2>Your Interactive Eco-Garden</h2>
+                <p class="text-secondary">Your choices grow this garden. Save CO₂ to unlock new flowers, plants, and weather patterns.</p>
+              </div>
+              <div class="garden-stats-row">
+                <div class="g-stat">
+                  <span class="g-stat-num" id="total-co2-saved">0.0 kg</span>
+                  <span class="g-stat-label">Total CO₂ Saved</span>
+                </div>
+                <div class="g-stat">
+                  <span class="g-stat-num" id="garden-score">100</span>
+                  <span class="g-stat-label">Garden Health</span>
+                </div>
+              </div>
+            </div>
+            <div class="garden-canvas-container full-garden">
+              <canvas id="full-garden-canvas"></canvas>
+              <div class="garden-canvas-hud">
+                <div class="hud-badges">
+                  <span class="badge" id="garden-weather-badge"><i data-lucide="sun"></i> Sunny Skies</span>
+                  <span class="badge badge-mint" id="plant-count-badge">5 Plants Active</span>
+                </div>
+                <div class="hud-controls">
+                  <button class="btn btn-icon" id="garden-refresh-btn" title="Regrow Garden"><i data-lucide="refresh-cw"></i></button>
+                  <button class="btn btn-icon" id="garden-weather-toggle" title="Toggle Daytime/Nighttime"><i data-lucide="moon"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- CHALLENGES VIEW -->
+        <section id="challenges-view" class="view-section">
+          <div class="challenges-view-header">
+            <h2>Sustainability Action Center</h2>
+            <p class="text-secondary">Take simple actions to offset your carbon footprint and earn Eco Points.</p>
+          </div>
+          
+          <div class="grid grid-3-col margin-top">
+            <div class="card glass-card challenge-category">
+              <div class="challenge-cat-header transport-theme">
+                <i data-lucide="navigation"></i>
+                <h3>Commute Actions</h3>
+              </div>
+              <div class="challenge-list" id="commute-challenges-container">
+                <!-- JS Inject -->
+              </div>
+            </div>
+            
+            <div class="card glass-card challenge-category">
+              <div class="challenge-cat-header diet-theme">
+                <i data-lucide="beef"></i>
+                <h3>Dietary Choices</h3>
+              </div>
+              <div class="challenge-list" id="diet-challenges-container">
+                <!-- JS Inject -->
+              </div>
+            </div>
+            
+            <div class="card glass-card challenge-category">
+              <div class="challenge-cat-header energy-theme">
+                <i data-lucide="plug"></i>
+                <h3>Power & Conservation</h3>
+              </div>
+              <div class="challenge-list" id="energy-challenges-container">
+                <!-- JS Inject -->
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- INSIGHTS VIEW -->
+        <section id="insights-view" class="view-section">
+          <h2>Personalized Sustainability Insights</h2>
+          <p class="text-secondary">AI-driven analysis based on your carbon inputs and reduction trends.</p>
+          
+          <div class="insights-container margin-top">
+            
+            <div class="insights-hero-card glass-card">
+              <div class="insights-hero-icon-wrapper">
+                <i data-lucide="brain-circuit"></i>
+              </div>
+              <div class="insights-hero-details">
+                <h3>Carbon Audit Report</h3>
+                <p id="carbon-audit-text">Your carbon footprint today is primarily driven by transportation. Try carpooling or taking transit to reduce your emissions.</p>
+              </div>
+            </div>
+            
+            <h3 class="margin-top section-title">Recommended Tips</h3>
+            <div class="grid grid-2-col" id="insights-tips-grid">
+              <!-- JS Injected Tip Cards -->
+            </div>
+            
+          </div>
+        </section>
+        
+      </div>
+    </main>
+    
+  </div>
+  
+  <!-- LOG ACTIVITY MODAL -->
+  <div class="modal-overlay" id="log-activity-modal">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <h2>Log Daily Activity</h2>
+        <button class="btn-close" id="close-log-modal-btn"><i data-lucide="x"></i></button>
+      </div>
+      
+      <div class="modal-tabs">
+        <button class="tab-btn active" data-tab="tab-transport">
+          <i data-lucide="car"></i> Transport
+        </button>
+        <button class="tab-btn" data-tab="tab-diet">
+          <i data-lucide="utensils"></i> Diet & Food
+        </button>
+        <button class="tab-btn" data-tab="tab-energy">
+          <i data-lucide="zap"></i> Home Energy
+        </button>
+        <button class="tab-btn" data-tab="tab-waste">
+          <i data-lucide="trash-2"></i> Waste
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <form id="activity-log-form">
+          
+          <!-- Transport Tab -->
+          <div class="tab-content active-tab" id="tab-transport">
+            <div class="form-group">
+              <label>Commute Type</label>
+              <div class="radio-tiles">
+                <label class="radio-tile-label">
+                  <input type="radio" name="commute-type" value="car-gas" checked>
+                  <div class="radio-tile-content">
+                    <i data-lucide="car"></i>
+                    <span>Petrol Car</span>
+                  </div>
+                </label>
+                <label class="radio-tile-label">
+                  <input type="radio" name="commute-type" value="car-ev">
+                  <div class="radio-tile-content">
+                    <i data-lucide="battery-charging"></i>
+                    <span>EV Car</span>
+                  </div>
+                </label>
+                <label class="radio-tile-label">
+                  <input type="radio" name="commute-type" value="transit">
+                  <div class="radio-tile-content">
+                    <i data-lucide="train"></i>
+                    <span>Public Transit</span>
+                  </div>
+                </label>
+                <label class="radio-tile-label">
+                  <input type="radio" name="commute-type" value="bike-walk">
+                  <div class="radio-tile-content">
+                    <i data-lucide="bike"></i>
+                    <span>Active / Walk</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <div class="label-row">
+                <label for="commute-distance">Distance Traveled</label>
+                <span class="slider-val-bubble"><span id="commute-distance-val">10</span> miles</span>
+              </div>
+              <input type="range" id="commute-distance" min="0" max="100" value="10" class="input-slider">
+              <div class="slider-labels">
+                <span>0 mi</span>
+                <span>50 mi</span>
+                <span>100 mi</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Diet Tab -->
+          <div class="tab-content" id="tab-diet">
+            <div class="form-group">
+              <label>Today's Meal Type</label>
+              <p class="text-secondary small margin-bottom-sm">Select the category that best describes your principal food source today.</p>
+              <div class="radio-tiles">
+                <label class="radio-tile-label">
+                  <input type="radio" name="meal-type" value="heavy-meat">
+                  <div class="radio-tile-content">
+                    <i data-lucide="beef"></i>
+                    <span>Heavy Meat</span>
+                  </div>
+                </label>
+                <label class="radio-tile-label recommended">
+                  <input type="radio" name="meal-type" value="balanced" checked>
+                  <div class="radio-tile-content">
+                    <i data-lucide="utensils-crossed"></i>
+                    <span>Average Diet</span>
+                  </div>
+                </label>
+                <label class="radio-tile-label">
+                  <input type="radio" name="meal-type" value="vegetarian">
+                  <div class="radio-tile-content">
+                    <i data-lucide="egg"></i>
+                    <span>Vegetarian</span>
+                  </div>
+                </label>
+                <label class="radio-tile-label">
+                  <input type="radio" name="meal-type" value="vegan">
+                  <div class="radio-tile-content">
+                    <i data-lucide="salad"></i>
+                    <span>Plant-based</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Energy Tab -->
+          <div class="tab-content" id="tab-energy">
+            <div class="form-group">
+              <label>Heating / Cooling Usage</label>
+              <div class="label-row">
+                <span class="text-secondary">Air Conditioning or Central Heating running duration</span>
+                <span class="slider-val-bubble"><span id="energy-hours-val">2</span> hours</span>
+              </div>
+              <input type="range" id="energy-hours" min="0" max="24" value="2" class="input-slider">
+              <div class="slider-labels">
+                <span>Off</span>
+                <span>12 hrs</span>
+                <span>24 hrs</span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Appliances & Lighting</label>
+              <div class="checkbox-tiles">
+                <label class="checkbox-tile-label">
+                  <input type="checkbox" id="appliances-laundry" value="laundry">
+                  <div class="checkbox-tile-content">
+                    <i data-lucide="washing-machine"></i>
+                    <span>High-Heat Laundry</span>
+                  </div>
+                </label>
+                <label class="checkbox-tile-label">
+                  <input type="checkbox" id="appliances-dryer" value="dryer">
+                  <div class="checkbox-tile-content">
+                    <i data-lucide="wind"></i>
+                    <span>Tumble Dryer</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Waste Tab -->
+          <div class="tab-content" id="tab-waste">
+            <div class="form-group">
+              <label>Recycling Effort</label>
+              <div class="radio-tiles">
+                <label class="radio-tile-label">
+                  <input type="radio" name="recycling" value="none">
+                  <div class="radio-tile-content">
+                    <i data-lucide="frown"></i>
+                    <span>No recycling</span>
+                  </div>
+                </label>
+                <label class="radio-tile-label">
+                  <input type="radio" name="recycling" value="some" checked>
+                  <div class="radio-tile-content">
+                    <i data-lucide="smile"></i>
+                    <span>Sorted basic</span>
+                  </div>
+                </label>
+                <label class="radio-tile-label">
+                  <input type="radio" name="recycling" value="full">
+                  <div class="radio-tile-content">
+                    <i data-lucide="laugh"></i>
+                    <span>Zero land-fill</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <div class="label-row">
+                <label for="waste-bags">Garbage Bag Generation</label>
+                <span class="slider-val-bubble"><span id="waste-bags-val">1</span> bag</span>
+              </div>
+              <input type="range" id="waste-bags" min="0" max="5" value="1" class="input-slider">
+              <div class="slider-labels">
+                <span>0 bags</span>
+                <span>2 bags</span>
+                <span>5 bags</span>
+              </div>
+            </div>
+          </div>
+          
+        </form>
+      </div>
+      
+      <!-- Live Calculation Footer -->
+      <div class="modal-footer">
+        <div class="live-calculation">
+          <span class="live-label">Estimated Impact:</span>
+          <span class="live-val-container">
+            <span class="live-val text-coral" id="live-carbon-estimate">3.20</span>
+            <span class="live-unit">kg CO₂e</span>
+          </span>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="cancel-log-btn">Cancel</button>
+          <button class="btn btn-primary" id="save-log-btn">Log to Dashboard</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <script src="app.js"></script>
+</body>
+</html>
